@@ -23,7 +23,7 @@ stages:
   - job: validate
     steps:
     - checkout: self
-    - template: templates/terraform_install.yml
+    - template: terraform_install.yml
 
     - script: terraform version
       displayName: 'terraform version'
