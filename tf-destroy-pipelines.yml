@@ -1,0 +1,27 @@
+name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+  
+  paths:
+    include:
+      - '*'
+    exclude:
+      - SPN-Terraform-Deployment
+
+# Reusing pipeline in multiple directories
+stages:
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/network'   # change directory to network
+
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/compute'   # change directory to compute
+
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/routes'    # chang directory to routes 
