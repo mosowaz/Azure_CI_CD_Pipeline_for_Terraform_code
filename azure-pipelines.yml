@@ -1,0 +1,27 @@
+name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+  
+  paths:
+    include:
+      - '*'
+    exclude:
+      - SPN-Terraform-Deployment
+
+stages:
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/network'
+
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/compute'
+
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/routes'
+
