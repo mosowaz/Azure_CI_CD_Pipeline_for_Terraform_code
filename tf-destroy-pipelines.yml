@@ -12,16 +12,16 @@ trigger:
     exclude:
       - SPN-Terraform-Deployment
 
-# Reusing pipeline in multiple directories
+# Reusing template pipeline for multiple directories
 stages:
-- template: templates/azure_pipeline_template.yml
+- template: templates/destroy_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastrucure/network'   # change directory to network
 
-- template: templates/azure_pipeline_template.yml
+- template: templates/destroy_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastrucure/compute'   # change directory to compute
 
-- template: templates/azure_pipeline_template.yml
+- template: templates/destroy_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastrucure/routes'    # chang directory to routes 
