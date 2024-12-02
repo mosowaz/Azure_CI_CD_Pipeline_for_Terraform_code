@@ -27,6 +27,7 @@ variable "spokes-vm" {
     admin_username = string
     rg_location    = string
     public_key     = string
+    private_ip     = string
   }))
   default = {
     "spoke1" = {
@@ -35,6 +36,7 @@ variable "spokes-vm" {
       admin_username = "adminuser"
       rg_location    = "canadaeast"
       public_key     = "~/.ssh/spoke1/id_rsa.pub"
+      private_ip     = "172.16.1.12"
     }
     "spoke2" = {
       name           = "spoke2-vm"
@@ -42,6 +44,7 @@ variable "spokes-vm" {
       admin_username = "adminuser"
       rg_location    = "canadacentral"
       public_key     = "~/.ssh/spoke2/id_rsa.pub"
+      private_ip     = "192.168.1.13"
     }
   }
 }
@@ -52,11 +55,13 @@ variable "hub-vm" {
     size           = string
     admin_username = string
     public_key     = string
+    private_ip     = string
   })
   default = {
     name           = "hub-vm"
     size           = "Standard_B1s"
     admin_username = "adminuser"
     public_key     = "~/.ssh/hub/id_rsa.pub"
+    private_ip     = "10.0.1.11"
   }
 }
