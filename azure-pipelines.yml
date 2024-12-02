@@ -1,10 +1,10 @@
 name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
 
-trigger: none
-#  batch: true
-#  branches:
-#    include:
-#    - main
+trigger: 
+  batch: true
+  branches:
+    include:
+    - main
   
   paths:
     include:
@@ -18,11 +18,11 @@ stages:
   parameters:
     SourceDirectory: 'infrastrucure/network'   # change directory to network
 
-#- template: templates/azure_pipeline_template.yml
-#  parameters:
-#    SourceDirectory: 'infrastrucure/compute'   # change directory to compute
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/compute'   # change directory to compute
 
-#- template: templates/azure_pipeline_template.yml
-#  parameters:
-#    SourceDirectory: 'infrastrucure/routes'    # change directory to routes 
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/routes'    # change directory to routes 
 
