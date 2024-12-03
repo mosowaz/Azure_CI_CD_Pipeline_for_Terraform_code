@@ -11,3 +11,11 @@ output "spokes_private_ip" {
     for i, j in azurerm_network_interface.spoke-nic : i => j.private_ip_address
   }
 }
+
+output "spoke1_public_ip" {
+  value = azurerm_public_ip.spoke1_pub_ip.ip_address
+}
+
+output "spoke2_public_ip" {
+  value = azurerm_public_ip.spoke2_pub_ip.ip_address
+}

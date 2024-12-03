@@ -23,6 +23,7 @@ resource "azurerm_network_interface" "spoke-nic" {
       rg_name    = azurerm_resource_group.rg2.name
       subnet_id  = data.azurerm_subnet.subnet2.subnet_id
       private_ip = var.spokes-vm.spoke1.private_ip
+      public_ip_address_id = data.azurerm_public_ip.spoke1_pub_ip.id
     }
     spoke2 = {
       name       = "${data.azurerm_subnet.subnet3.name}-nic"
@@ -30,6 +31,7 @@ resource "azurerm_network_interface" "spoke-nic" {
       rg_name    = azurerm_resource_group.rg1.name
       subnet_id  = data.azurerm_subnet.subnet3.subnet_id
       private_ip = var.spokes-vm.spoke2.private_ip
+      public_ip_address_id = data.azurerm_public_ip.spoke2_pub_ip.id
     }
   })
   name                = each.value.name
@@ -41,11 +43,26 @@ resource "azurerm_network_interface" "spoke-nic" {
     subnet_id                     = each.value.subnet_id
     private_ip_address_allocation = "Static"
     private_ip_address            = each.value.private_ip
+    public_ip_address_id          = each.value.public_ip_address_id
   }
 }
 
-resource "azurerm_public_ip" "pub_ip" {
+resource "azurerm_public_ip" "hub_pub_ip" {
   name                = "hub-pub-ip"
+  resource_group_name = azurerm_resource_group.rg1.name
+  location            = azurerm_resource_group.rg1.location
+  allocation_method   = "Static"
+}
+
+resource "azurerm_public_ip" "spoke1_pub_ip" {
+  name                = "spoke1-pub-ip"
+  resource_group_name = azurerm_resource_group.rg2.name
+  location            = azurerm_resource_group.rg2.location
+  allocation_method   = "Static"
+}
+
+resource "azurerm_public_ip" "spoke2_pub_ip" {
+  name                = "spoke2-pub-ip"
   resource_group_name = azurerm_resource_group.rg1.name
   location            = azurerm_resource_group.rg1.location
   allocation_method   = "Static"
@@ -62,14 +79,14 @@ resource "azurerm_network_interface" "hub-nic" {
     subnet_id                     = data.azurerm_subnet.subnet1.subnet_id
     private_ip_address_allocation = "Static"
     private_ip_address            = var.hub-vm.private_ip
-    public_ip_address_id          = data.azurerm_public_ip.pub_ip.id
+    public_ip_address_id          = data.azurerm_public_ip.hub_pub_ip.id
   }
 }
-##################################################Continue from Here ###############################################
+
 resource "azurerm_linux_virtual_machine" "spokes-vm" {
   for_each            = var.spokes-vm
   name                = each.value.name
-  resource_group_name = "${each.value.rg_location}-rg"
+  resource_group_name = each.value.rg_name
   location            = each.value.rg_location
   size                = each.value.size
   admin_username      = each.value.admin_username
@@ -103,10 +120,17 @@ resource "azurerm_linux_virtual_machine" "spokes-vm" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+
+  connection {
+    type        = "ssh"
+    user        = self.admin_username
+    private_key = file(each.value.private_key)
+    host        = self.public_ip_address
+  }
 }
 
 resource "azurerm_linux_virtual_machine" "hub-vm" {
-  depends_on          = [data.azurerm_network_interface.hub-nic, data.azurerm_public_ip.pub_ip]
+  depends_on          = [data.azurerm_network_interface.hub-nic, data.azurerm_public_ip.hub_pub_ip]
   name                = var.hub-vm.name
   resource_group_name = azurerm_resource_group.rg1.name
   location            = azurerm_resource_group.rg1.location
@@ -146,12 +170,7 @@ resource "azurerm_linux_virtual_machine" "hub-vm" {
   connection {
     type        = "ssh"
     user        = self.admin_username
-    private_key = file("~/.ssh/hub/id_rsa")
+    private_key = file(var.hub-vm.private_key)
     host        = self.public_ip_address
-  }
-
-  provisioner "local-exec" {
-    command    = "echo ${self.public_ip_address} > hub-vm_pub-ip.txt"
-    on_failure = continue
   }
 }
