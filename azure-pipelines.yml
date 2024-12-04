@@ -15,13 +15,13 @@ trigger: none
 variables:
 - group: 'service-connection'
 - name: RG_Name
-  value: "terraform-backend"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
+  value: "rg-ADO-2"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
 - name: StorageAccName
-  value: "terraformstates16555"  # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
+  value: "mystorageacct16425"  # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
 - name: ContainerName
-  value: "remote-backend"         # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
+  value: "storage-container"         # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
 - name: BlobName
-  value: "spn-ado-1"                   # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
+  value: "hub-spoke-peering"                   # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
 - name: ADO-Environment
   value: "PROD"
 
