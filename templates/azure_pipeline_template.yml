@@ -23,10 +23,10 @@ stages:
           -backend-config="key=$(BlobName)"
         terraform fmt && terraform validate
       env:
-        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-        ARM_TENANT_ID: $(ARM_TENANT_ID)
-        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+        ARM_CLIENT_ID: $(SPN2-client-id)
+        ARM_TENANT_ID: $(SPN2-tenant-id)
+        ARM_CLIENT_SECRET: $(SPN2-client-secret)
+        ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
       displayName: 'terraform fmt and validate'
       workingDirectory: ${{parameters.SourceDirectory}}
 
@@ -38,10 +38,10 @@ stages:
     - bash: |
         terraform plan -out=main.tfplan -lock=false
       env:
-        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-        ARM_TENANT_ID: $(ARM_TENANT_ID)
-        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+        ARM_CLIENT_ID: $(SPN2-client-id)
+        ARM_TENANT_ID: $(SPN2-tenant-id)
+        ARM_CLIENT_SECRET: $(SPN2-client-secret)
+        ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
         TF_VAR_hub-vm.public_key: 
         TF_VAR_hub-vm.private_key:
         TF_VAR_spokes-vm.spoke1.public_key:
@@ -64,10 +64,10 @@ stages:
           - checkout: self
           - bash: terraform apply main.tfplan -auto-approve -lock=true 
             env:
-              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-              ARM_TENANT_ID: $(ARM_TENANT_ID)
-              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-              ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+              ARM_CLIENT_ID: $(SPN2-client-id)
+              ARM_TENANT_ID: $(SPN2-tenant-id)
+              ARM_CLIENT_SECRET: $(SPN2-client-secret)
+              ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
             workingDirectory: ${{parameters.SourceDirectory}}
             displayName: 'terraform apply'
 
