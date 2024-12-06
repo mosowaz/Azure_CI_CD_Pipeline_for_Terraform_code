@@ -1,6 +1,6 @@
 name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
 
-trigger: 
+trigger: none
   batch: true
   branches:
     include:
