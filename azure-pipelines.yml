@@ -36,12 +36,14 @@ stages:
 - template: templates/azure_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastrucure/network'   # change directory to network
-
+    infrastructure: 'Network'
 - template: templates/azure_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastrucure/compute'   # change directory to compute
+    infrastructure: 'Compute'
 
 #- template: templates/azure_pipeline_template.yml
 #  parameters:
 #    SourceDirectory: 'infrastrucure/routes'    # change directory to routes 
+     #infrastructure: 'Routes'
  
