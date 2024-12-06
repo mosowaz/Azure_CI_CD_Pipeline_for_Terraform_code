@@ -1,16 +1,16 @@
 name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
 
-trigger: none
-  #batch: true
-  #branches:
-    #include:
-    #- main
+trigger: 
+  batch: true
+  branches:
+    include:
+    - main
   
- # paths:
- #   include:
- #     - '*'
- #   exclude:
-  #    - SPN-Terraform-Deployment
+  paths:
+    include:
+      - '*'
+    exclude:
+      - SPN-Terraform-Deployment
 
 variables:
 - group: 'service-connection'
@@ -22,7 +22,7 @@ variables:
 - name: ContainerName
   value: "storage-container"         # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
 - name: BlobName
-  value: "hub-spoke-peering"                   # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
+  value: "hub-spoke-peering"         # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
 - name: ADO-Environment
   value: "PROD"
 
@@ -32,9 +32,9 @@ stages:
   parameters:
     SourceDirectory: 'infrastrucure/network'   # change directory to network
 
-#- template: templates/azure_pipeline_template.yml
-#  parameters:
-#    SourceDirectory: 'infrastrucure/compute'   # change directory to compute
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/compute'   # change directory to compute
 
 #- template: templates/azure_pipeline_template.yml
 #  parameters:

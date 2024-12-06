@@ -1,16 +1,29 @@
 name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
 
 trigger: none
-#  batch: true
-#  branches:
-#    include:
-#    - main
+  batch: true
+  branches:
+    include:
+    - main
   
-#  paths:
-#    include:
-#      - '*'
-#    exclude:
- #     - SPN-Terraform-Deployment
+  paths:
+    include:
+      - '*'
+    exclude:
+      - SPN-Terraform-Deployment
+
+variables:
+- group: 'service-connection'
+- name: RG_Name
+  value: "rg-ADO-2"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
+- name: StorageAccName
+  value: "mystorageacct16425"  # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
+- name: ContainerName
+  value: "storage-container"         # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
+- name: BlobName
+  value: "hub-spoke-peering"         # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
+- name: ADO-Environment
+  value: "PROD"
 
 # Reusing template pipeline for multiple directories
 stages:
@@ -18,9 +31,9 @@ stages:
 #  parameters:
 #    SourceDirectory: 'infrastrucure/routes'   # change directory to network
 
-#- template: templates/destroy_pipeline_template.yml
-#  parameters:
-#    SourceDirectory: 'infrastrucure/compute'   # change directory to compute
+- template: templates/destroy_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastrucure/compute'   # change directory to compute
 
 - template: templates/destroy_pipeline_template.yml
   parameters:

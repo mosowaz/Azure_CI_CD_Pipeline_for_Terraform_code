@@ -42,12 +42,12 @@ stages:
         ARM_TENANT_ID: $(SPN2-tenant-id)
         ARM_CLIENT_SECRET: $(SPN2-client-secret)
         ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
-        TF_VAR_hub-vm.public_key: 
-        TF_VAR_hub-vm.private_key:
-        TF_VAR_spokes-vm.spoke1.public_key:
-        TF_VAR_spokes-vm.spoke1.private_key:
-        TF_VAR_spokes-vm.spoke2.public_key:
-        TF_VAR_spokes-vm.spoke2.private_key:
+        TF_VAR_hub-sshkey: 
+        TF_VAR_hub-sshkey-pub:
+        TF_VAR_sp1-sshkey:
+        TF_VAR_sp1-sshkey-pub:
+        TF_VAR_sp2-sshkey:
+        TF_VAR_sp2-sshkey-pub:
       workingDirectory: ${{parameters.SourceDirectory}}
       displayName: 'terraform plan'
     continueOnError: false  

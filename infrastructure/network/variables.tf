@@ -1,3 +1,7 @@
+variable "subscription_id" {
+  type = string
+}
+
 variable "location1" {
   type = string
   default = "canadacentral" 
