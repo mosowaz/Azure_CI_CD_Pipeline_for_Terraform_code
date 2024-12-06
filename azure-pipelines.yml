@@ -11,7 +11,8 @@ trigger:
       - '*'
     exclude:
       - SPN-Terraform-Deployment
-
+      - tf-destroy-pipelines.yml
+      
 variables:
 - group: 'service-connection'
 - group: 'ssh-keys'
