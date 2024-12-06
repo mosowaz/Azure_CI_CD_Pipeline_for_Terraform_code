@@ -1,7 +1,7 @@
 # Pipeline template to be used in the main pipeline for multiple stages
 
 stages:
-- stage: Plan-Destroy-${{parameters.SourceDirectory}}
+- stage: Plan-Destroy
   displayName: '${{parameters.SourceDirectory}} Plan Stage'
   pool:
     vmImage: ubuntu-latest
@@ -55,7 +55,7 @@ stages:
       displayName: 'Deleting tfplan file'
     continueOnError: false  
 
-- stage: Apply-Destroy-${{parameters.SourceDirectory}}
+- stage: Apply-Destroy
   displayName: '${{parameters.SourceDirectory}} Apply Stage'
   pool:
     vmImage: ubuntu-latest

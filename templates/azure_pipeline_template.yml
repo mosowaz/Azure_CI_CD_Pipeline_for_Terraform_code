@@ -1,7 +1,7 @@
 # Pipeline template to be used in the main pipeline for multiple stages
 
 stages:
-- stage: Build-${{parameters.SourceDirectory}}
+- stage: Build
   displayName: '${{parameters.SourceDirectory}} Build Stage'
   pool:
     vmImage: ubuntu-latest
@@ -61,7 +61,7 @@ stages:
       displayName: 'Deleting tfplan file'
     continueOnError: false  
    
-- stage: Deploy-${{parameters.SourceDirectory}}
+- stage: Deploy
   displayName: '${{parameters.SourceDirectory}} Deploy Stage'
   pool:
     vmImage: ubuntu-latest
