@@ -35,15 +35,15 @@ variables:
 stages:
 - template: templates/azure_pipeline_template.yml
   parameters:
-    SourceDirectory: '$(System.DefaultWorkingDirectory)/infrastrucure/network'   # change directory to network
+    SourceDirectory: 'infrastructure/network'   # change directory to network
     infrastructure: 'Network'
 - template: templates/azure_pipeline_template.yml
   parameters:
-    SourceDirectory: '$(System.DefaultWorkingDirectory)/infrastrucure/compute'   # change directory to compute
+    SourceDirectory: 'infrastructure/compute'   # change directory to compute
     infrastructure: 'Compute'
 
 #- template: templates/azure_pipeline_template.yml
 #  parameters:
-#    SourceDirectory: '$(System.DefaultWorkingDirectory)/infrastrucure/routes'    # change directory to routes 
+#    SourceDirectory: 'infrastructure/routes'    # change directory to routes 
      #infrastructure: 'Routes'
  
