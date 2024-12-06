@@ -1,5 +1,5 @@
 # Pipeline template to be used in the main pipeline for multiple stages
-
+#
 pool:
   vmImage: ubuntu-latest
 
