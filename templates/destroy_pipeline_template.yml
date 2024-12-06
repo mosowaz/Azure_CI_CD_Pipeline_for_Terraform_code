@@ -1,13 +1,14 @@
 # Pipeline template to be used in the main pipeline for multiple stages
 
-pool:
-  vmImage: ubuntu-latest
-
 stages:
 - stage: Plan_Destroy_${{parameters.SourceDirectory}}
   displayName: '${{parameters.SourceDirectory}} Plan Stage'
+  pool:
+    vmImage: ubuntu-latest
+
   jobs:
   - job: validate
+
     steps:
     - checkout: self
     - template: terraform_install.yml
@@ -23,31 +24,39 @@ stages:
           -backend-config="key=$(BlobName)"
         terraform fmt && terraform validate
       env:
-        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-        ARM_TENANT_ID: $(ARM_TENANT_ID)
-        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+        ARM_CLIENT_ID: $(SPN2-client-id)
+        ARM_TENANT_ID: $(SPN2-tenant-id)
+        ARM_CLIENT_SECRET: $(SPN2-client-secret)
+        ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
       displayName: 'terraform fmt and validate'
       workingDirectory: ${{parameters.SourceDirectory}}
 
-  - job: plan-destroy
+  - job: plan-destroy_and_publish
     dependsOn: validate
     condition: succeeded()
     steps:
     - checkout: self
-    - bash: |
-        terraform plan -destroy -out=main.destroy.tfplan -lock=false
+    - bash: terraform plan -destroy -out=$(tf_destroyFile) -lock=false
       env:
-        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-        ARM_TENANT_ID: $(ARM_TENANT_ID)
-        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+        ARM_CLIENT_ID: $(SPN2-client-id)
+        ARM_TENANT_ID: $(SPN2-tenant-id)
+        ARM_CLIENT_SECRET: $(SPN2-client-secret)
+        ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
       workingDirectory: ${{parameters.SourceDirectory}}
       displayName: 'terraform plan destroy'
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)' 
+        artifact: $(tf_destroyFile) # artifactName
+        publishLocation: 'pipeline' # upload artifact to pipeline
     continueOnError: false  
 
 - stage: Apply_Destroy_${{parameters.SourceDirectory}}
   displayName: '${{parameters.SourceDirectory}} Apply Stage'
+  pool:
+    vmImage: ubuntu-latest
+
   jobs:
   - deployment: apply-destroy
     environment: $(ADO-Environment)        
@@ -55,12 +64,15 @@ stages:
       runOnce:
         deploy:
           steps:
-          - checkout: self
-          - bash: terraform apply main.destroy.tfplan -auto-approve -lock=true 
+          - download: current
+            artifact: $(tf_destroyFile)
+          - bash: |
+              chmod a+x $(tf_destroyFile)
+              terraform apply $(tf_destroyFile) -auto-approve -lock=true
             env:
-              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-              ARM_TENANT_ID: $(ARM_TENANT_ID)
-              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-              ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+              ARM_CLIENT_ID: $(SPN2-client-id)
+              ARM_TENANT_ID: $(SPN2-tenant-id)
+              ARM_CLIENT_SECRET: $(SPN2-client-secret)
+              ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
             workingDirectory: ${{parameters.SourceDirectory}}
             displayName: 'terraform destroy'

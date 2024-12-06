@@ -6,6 +6,7 @@ stages:
   displayName: '${{parameters.SourceDirectory}} Build Stage'
   pool:
     vmImage: ubuntu-latest
+
   jobs:
   - job: validate
     steps:
@@ -30,13 +31,12 @@ stages:
       displayName: 'terraform fmt and validate'
       workingDirectory: ${{parameters.SourceDirectory}}
 
-  - job: plan
+  - job: plan_and_publish
     dependsOn: validate
     condition: succeeded()
     steps:
     - checkout: self
-    - bash: |
-        terraform plan -out=main.tfplan -lock=false
+    - bash: terraform plan -out=$(tf_planFile) -lock=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -50,11 +50,19 @@ stages:
         TF_VAR_sp2-sshkey-pub:
       workingDirectory: ${{parameters.SourceDirectory}}
       displayName: 'terraform plan'
+    
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)' 
+        artifact: $(tf_planFile) # artifactName
+        publishLocation: 'pipeline' # upload artifact to pipeline
     continueOnError: false  
    
-
 - stage: Deploy_${{parameters.SourceDirectory}}
   displayName: '${{parameters.SourceDirectory}} Deploy Stage'
+  pool:
+    vmImage: ubuntu-latest
+
   jobs:
   - deployment: apply
     environment: $(ADO-Environment)        
@@ -62,8 +70,11 @@ stages:
       runOnce:
         deploy:
           steps:
-          - checkout: self
-          - bash: terraform apply main.tfplan -auto-approve -lock=true 
+          - download: current
+            artifact: $(tf_planFile)
+          - bash: |
+              chmod a+x $(tf_planFile)
+              terraform apply $(tf_planFile) -auto-approve -lock=true 
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)
               ARM_TENANT_ID: $(SPN2-tenant-id)
