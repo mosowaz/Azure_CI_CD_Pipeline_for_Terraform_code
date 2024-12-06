@@ -1,8 +1,7 @@
 # Pipeline template to be used in the main pipeline for multiple stages
 
-
 stages:
-- stage: Build_${{parameters.SourceDirectory}}
+- stage: Build-${{parameters.SourceDirectory}}
   displayName: '${{parameters.SourceDirectory}} Build Stage'
   pool:
     vmImage: ubuntu-latest
@@ -31,7 +30,7 @@ stages:
       displayName: 'terraform fmt and validate'
       workingDirectory: ${{parameters.SourceDirectory}}
 
-  - job: plan_and_publish
+  - job: plan-and-publish
     dependsOn: validate
     condition: succeeded()
     steps:
@@ -62,7 +61,7 @@ stages:
       displayName: 'Deleting tfplan file'
     continueOnError: false  
    
-- stage: Deploy_${{parameters.SourceDirectory}}
+- stage: Deploy-${{parameters.SourceDirectory}}
   displayName: '${{parameters.SourceDirectory}} Deploy Stage'
   pool:
     vmImage: ubuntu-latest
