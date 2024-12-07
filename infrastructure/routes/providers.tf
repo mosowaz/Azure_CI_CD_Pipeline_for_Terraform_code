@@ -14,5 +14,4 @@ provider "azurerm" {
     }
   }
   storage_use_azuread = true
-  subscription_id = ARM_SUBSCRIPTION_ID
 }
