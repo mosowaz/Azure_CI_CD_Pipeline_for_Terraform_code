@@ -36,7 +36,9 @@ stages:
     condition: succeeded()
     steps:
     - checkout: self
-    - bash: terraform plan -destroy -out=$(tf_destroyFile) -lock=false
+    - bash: |
+        terraform init -upgrade
+        terraform plan -destroy -out=$(tf_destroyFile) -lock=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
