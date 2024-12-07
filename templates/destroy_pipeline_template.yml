@@ -52,9 +52,6 @@ stages:
         targetPath: '$(Pipeline.Workspace)' 
         artifact: $(tf_destroyFile) # artifactName
         publishLocation: 'pipeline' # upload artifact to pipeline
-
-    - bash: rm $(tf_destroyFile)  # delete terraform plan file from agent
-      displayName: 'Deleting tfplan file'
     continueOnError: false  
 
 - stage: Apply-Destroy
