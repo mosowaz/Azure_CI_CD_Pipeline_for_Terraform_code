@@ -1,8 +1,3 @@
-variable "subscription_id" {
-  type = string
-  sensitive = true
-}
-
 variable "location1" {
   type    = string
   default = "canadacentral"
