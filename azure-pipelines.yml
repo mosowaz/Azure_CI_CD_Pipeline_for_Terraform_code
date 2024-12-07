@@ -29,7 +29,7 @@ variables:
 - name: ADO-Environment
   value: "PROD"
 - name: tf_planFile
-  value: "main.tfplan-$(Build.BuildNumber)"  
+  value: "main.tfplan"  
   
   # Reusing pipeline in multiple directories
 stages:
