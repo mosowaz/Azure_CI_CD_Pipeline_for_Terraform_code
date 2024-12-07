@@ -28,7 +28,7 @@ variables:
 - name: ADO-Environment
   value: "PROD"
 - name: tf_destroyFile
-  value: "main.destroy.tfplan$(Rev:rr)" 
+  value: "destroy.tfplan" 
 
 # Reusing template pipeline for multiple directories
 stages:
