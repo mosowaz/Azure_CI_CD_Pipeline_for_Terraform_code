@@ -77,7 +77,8 @@ stages:
             artifact: $(tf_planFile)
             displayName: 'Downloading artifact'
           - bash: |
-              terraform apply $(tf_planFile) -auto-approve -lock=true
+              chmod a+x $(tf_planFile)
+              terraform apply $(tf_planFile) -auto-approve -lock=true -input=false
             workingDirectory: '$(Pipeline.Workspace)'
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)

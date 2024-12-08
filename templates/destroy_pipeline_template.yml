@@ -71,7 +71,7 @@ stages:
             displayName: 'Downloading artifact'
           - bash: |
               chmod a+x $(tf_destroyFile)
-              terraform apply $(tf_destroyFile) -auto-approve -lock=true
+              terraform apply $(tf_destroyFile) -auto-approve -lock=true -input=false
             workingDirectory: '$(Pipeline.Workspace)'
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)
