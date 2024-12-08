@@ -38,7 +38,7 @@ stages:
     - checkout: self
     - bash: |
         terraform init -upgrade
-        terraform plan -destroy -out=$(tf_destroyFile) -lock=false
+        terraform plan -destroy '-out=$(tf_destroyFile)' '-lock=false'
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -74,7 +74,7 @@ stages:
           
           - bash: |
               chmod a+x $(tf_destroyFile)
-              terraform apply $(tf_destroyFile) -auto-approve -lock=true
+              terraform apply $(tf_destroyFile) '-auto-approve' '-lock=true'
             workingDirectory: '$(Pipeline.Workspace)'
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)
