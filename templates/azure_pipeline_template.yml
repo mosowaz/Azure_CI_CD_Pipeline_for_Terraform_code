@@ -37,7 +37,7 @@ stages:
     - checkout: self
     - bash: | 
         terraform init -upgrade
-        terraform plan '-out=$(tf_planFile)' '-lock=false'
+        terraform plan -out='$(Build.SourcesDirectory)/$(tf_planFile)' -lock=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -55,7 +55,7 @@ stages:
     
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Pipeline.Workspace)' 
+        targetPath: '$(Build.SourcesDirectory)' 
         artifact: $(tf_planFile) # artifactName
         publishLocation: 'pipeline' # upload artifact to pipeline
       displayName: 'Publishing artifact'
@@ -73,35 +73,23 @@ stages:
       runOnce:
         deploy:
           steps:
-          - download: current
-            artifact: $(tf_planFile)
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: '$(tf_planFile)'
+              targetPath: '$(Build.SourcesDirectory)'
             displayName: 'Downloading artifact'
 
           - template: terraform_install.yml  
           
           - bash: |
-              ls -lA $(Pipeline.Workspace) && tree $(Pipeline.Workspace)
-            displayName: 'pipeline-workspace'
-            continueOnError: true
-          - bash: |
-              ls -lA $(Build.ArtifactStagingDirectory) && tree $(Build.ArtifactStagingDirectory)
-            displayName: 'Build-ArtifactStagingDirectory'
-            continueOnError: true
-          - bash: |
-              ls -lA $(Build.StagingDirectory) && tree $(Build.StagingDirectory)
-            displayName: 'Build-StagingDirectory'
-            continueOnError: true
-          - bash: |
-              ls -lA $(Build.SourcesDirectory) && tree $(Build.SourcesDirectory)
-            displayName: 'Build-SourcesDirectory'
-            continueOnError: true
-            #   terraform apply -auto-approve -lock=true '$(tf_planFile)' 
-            # workingDirectory: '$(Pipeline.Workspace)'
-            # env:
-            #   ARM_CLIENT_ID: $(SPN2-client-id)
-            #   ARM_TENANT_ID: $(SPN2-tenant-id)
-            #   ARM_CLIENT_SECRET: $(SPN2-client-secret)
-            #   ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
-            # displayName: 'terraform apply'
+              terraform apply -auto-approve -lock=true '$(tf_planFile)' 
+            workingDirectory: '$(Build.SourcesDirectory)'
+            env:
+              ARM_CLIENT_ID: $(SPN2-client-id)
+              ARM_TENANT_ID: $(SPN2-tenant-id)
+              ARM_CLIENT_SECRET: $(SPN2-client-secret)
+              ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
+            displayName: 'terraform apply'
 
 
