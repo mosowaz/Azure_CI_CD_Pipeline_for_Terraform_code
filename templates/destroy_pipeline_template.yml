@@ -1,7 +1,7 @@
 # Pipeline template to be used in the main pipeline for multiple stages
 
 stages:
-- stage: Plan-Destroy
+- stage: Plan-Destroy-${{parameters.infrastructure}}
   displayName: '${{parameters.SourceDirectory}} Plan Stage'
   pool:
     vmImage: ubuntu-latest
@@ -54,7 +54,7 @@ stages:
         publishLocation: 'pipeline' # upload artifact to pipeline
     continueOnError: false  
 
-- stage: Apply-Destroy
+- stage: Apply-Destroy-${{parameters.infrastructure}}
   displayName: '${{parameters.SourceDirectory}} Apply Stage'
   pool:
     vmImage: ubuntu-latest

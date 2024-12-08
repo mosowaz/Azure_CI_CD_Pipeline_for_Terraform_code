@@ -18,6 +18,7 @@ variables:
   value: 'true'
 - group: 'service-connection'
 - group: 'ssh-keys'
+- group: 'mypublic-ip'
 - name: RG_Name
   value: "rg-ADO-2"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
 - name: StorageAccName
@@ -37,13 +38,14 @@ stages:
   parameters:
     SourceDirectory: 'infrastructure/network'   # change directory to network
     infrastructure: 'Network'
+
 - template: templates/azure_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastructure/compute'   # change directory to compute
     infrastructure: 'Compute'
 
-#- template: templates/azure_pipeline_template.yml
-#  parameters:
-#    SourceDirectory: 'infrastructure/routes'    # change directory to routes 
-     #infrastructure: 'Routes'
+- template: templates/azure_pipeline_template.yml
+  parameters:
+    SourceDirectory: 'infrastructure/routes'    # change directory to routes 
+    infrastructure: 'Routes'
  
