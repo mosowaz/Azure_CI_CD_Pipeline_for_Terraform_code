@@ -80,13 +80,28 @@ stages:
           - template: terraform_install.yml  
           
           - bash: |
-              terraform apply -auto-approve -lock=true '$(tf_planFile)' 
-            workingDirectory: '$(Pipeline.Workspace)'
-            env:
-              ARM_CLIENT_ID: $(SPN2-client-id)
-              ARM_TENANT_ID: $(SPN2-tenant-id)
-              ARM_CLIENT_SECRET: $(SPN2-client-secret)
-              ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
-            displayName: 'terraform apply'
+              ls -lA $(Pipeline.Workspace) && tree $(Pipeline.Workspace)
+            displayName: 'pipeline-workspace'
+            continueOnError: true
+          - bash: |
+              ls -lA $(Build.ArtifactStagingDirectory) && tree $(Build.ArtifactStagingDirectory)
+            displayName: 'Build-ArtifactStagingDirectory'
+            continueOnError: true
+          - bash: |
+              ls -lA $(Build.StagingDirectory) && tree $(Build.StagingDirectory)
+            displayName: 'Build-StagingDirectory'
+            continueOnError: true
+          - bash: |
+              ls -lA $(Build.SourcesDirectory) && tree $(Build.SourcesDirectory)
+            displayName: 'Build-SourcesDirectory'
+            continueOnError: true
+            #   terraform apply -auto-approve -lock=true '$(tf_planFile)' 
+            # workingDirectory: '$(Pipeline.Workspace)'
+            # env:
+            #   ARM_CLIENT_ID: $(SPN2-client-id)
+            #   ARM_TENANT_ID: $(SPN2-tenant-id)
+            #   ARM_CLIENT_SECRET: $(SPN2-client-secret)
+            #   ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
+            # displayName: 'terraform apply'
 
 
