@@ -73,8 +73,7 @@ stages:
           - template: terraform_install.yml  
           
           - bash: |
-              chmod a+x $(tf_destroyFile)
-              terraform apply $(tf_destroyFile) '-auto-approve -lock=true'
+              terraform apply $(tf_destroyFile) -auto-approve -lock=true
             workingDirectory: '$(Pipeline.Workspace)'
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)
