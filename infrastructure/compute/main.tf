@@ -83,7 +83,7 @@ resource "azurerm_network_interface" "hub-nic" {
 }
 
 resource "azurerm_linux_virtual_machine" "spokes-vm" {
-  for_each            = var.spokes-vm
+  for_each            = tomap({local.spokes-vm})
   name                = each.value.name
   resource_group_name = each.value.rg_name
   location            = each.value.rg_location
@@ -130,11 +130,11 @@ resource "azurerm_linux_virtual_machine" "spokes-vm" {
 
 resource "azurerm_linux_virtual_machine" "hub-vm" {
   depends_on          = [data.azurerm_network_interface.hub-nic, data.azurerm_public_ip.hub_pub_ip]
-  name                = var.hub-vm.name
+  name                = local.hub-vm.name
   resource_group_name = azurerm_resource_group.rg1.name
   location            = azurerm_resource_group.rg1.location
-  size                = var.hub-vm.size
-  admin_username      = var.hub-vm.admin_username
+  size                = local.hub-vm.size
+  admin_username      = local.hub-vm.admin_username
   network_interface_ids = [
     data.azurerm_network_interface.hub-nic.id
   ]
@@ -150,8 +150,8 @@ resource "azurerm_linux_virtual_machine" "hub-vm" {
   )
 
   admin_ssh_key {
-    username   = var.hub-vm.admin_username
-    public_key = file(var.hub-vm.public_key)
+    username   = local.hub-vm.admin_username
+    public_key = file(local.hub-vm.public_key)
   }
 
   os_disk {
@@ -169,7 +169,7 @@ resource "azurerm_linux_virtual_machine" "hub-vm" {
   connection {
     type        = "ssh"
     user        = self.admin_username
-    private_key = file(var.hub-vm.private_key)
+    private_key = file(local.hub-vm.private_key)
     host        = self.public_ip_address
   }
 }
