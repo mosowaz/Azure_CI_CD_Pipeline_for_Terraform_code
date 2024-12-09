@@ -36,8 +36,8 @@ data "azurerm_network_interface" "spoke-nic" {
 }
 
 data "azurerm_public_ip" "hub_pub_ip" {
-  name                = azurerm_public_ip.pub_ip.name
-  resource_group_name = azurerm_public_ip.pub_ip.resource_group_name
+  name                = azurerm_public_ip.hub_pub_ip.name
+  resource_group_name = azurerm_public_ip.hub_pub_ip.resource_group_name
 }
 
 data "azurerm_public_ip" "spoke1_pub_ip" {

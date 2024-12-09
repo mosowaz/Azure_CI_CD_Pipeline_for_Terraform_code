@@ -8,7 +8,7 @@ locals {
         rg_location    = azurerm_resource_group.rg2.location
         private_ip     = "172.16.1.12"
         public_key     = var.sp1-sshkey-pub
-        private_key    = var.sp1.sshkey
+        private_key    = var.sp1-sshkey
     }
     spoke2 = {
         name           = "spoke2-vm"
@@ -18,7 +18,7 @@ locals {
         rg_location    = azurerm_resource_group.rg1.location
         private_ip     = "192.168.1.13"
         public_key     = var.sp2-sshkey-pub
-        private_key    = var.sp2.sshkey
+        private_key    = var.sp2-sshkey
     }
   }  
 }
@@ -30,6 +30,6 @@ locals {
     admin_username = "adminuser"
     private_ip     = "10.0.1.11"
     public_key     = var.hub-sshkey-pub
-    private_key    = var.hub.sshkey
+    private_key    = var.hub-sshkey
   }
 }

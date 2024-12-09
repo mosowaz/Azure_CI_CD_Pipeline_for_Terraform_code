@@ -2,7 +2,6 @@
 
 stages:
 - stage: Build_${{parameters.infrastructure}}
-  isSkippable: true
   displayName: '${{parameters.SourceDirectory}} Build Stage'
   pool:
     vmImage: ubuntu-latest
@@ -67,7 +66,6 @@ stages:
     continueOnError: false  
    
 - stage: Deploy_${{parameters.infrastructure}}
-  isSkippable: true
   displayName: '${{parameters.SourceDirectory}} Deploy Stage'
   pool:
     vmImage: ubuntu-latest
