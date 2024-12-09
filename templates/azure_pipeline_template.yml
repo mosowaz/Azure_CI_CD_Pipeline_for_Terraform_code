@@ -36,8 +36,8 @@ stages:
     steps:
     - checkout: self
     - bash: | 
-        terraform init -upgrade
-        terraform plan -out='$(Build.SourcesDirectory)/$(tf_planFile)' -lock=false
+        terraform init -upgrade -input=false
+        terraform plan -out='$(Build.SourcesDirectory)/$(tf_planFile)' -lock=false -input=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -84,7 +84,8 @@ stages:
           - template: terraform_install.yml  
           
           - bash: |
-              terraform apply -auto-approve -lock=true '$(tf_planFile)' 
+              terraform init -lockfile=readonly -input=false
+              terraform apply -auto-approve -input=false '$(tf_planFile)' 
             workingDirectory: '$(Build.SourcesDirectory)'
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)
