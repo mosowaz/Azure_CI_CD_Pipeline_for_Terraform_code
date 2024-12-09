@@ -8,10 +8,6 @@ variable "location2" {
   default = "canadaeast"
 }
 
-variable "mypassword" {
-  sensitive = true
-}
-
 variable "hub-sshkey" {}      # environment variable to be passed from pipeline (key vault)
 variable "hub-sshkey-pub" {}       # environment variable to be passed from pipeline (key vault)
 variable "sp1-sshkey" {}   # environment variable to be passed from pipeline (key vault)
