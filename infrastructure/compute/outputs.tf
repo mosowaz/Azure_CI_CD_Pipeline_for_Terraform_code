@@ -1,5 +1,5 @@
 output "hub_public_ip" {
-  value = azurerm_public_ip.pub_ip.ip_address
+  value = azurerm_public_ip.hub_pub_ip.ip_address
 }
 
 output "hub_private_ip" {
