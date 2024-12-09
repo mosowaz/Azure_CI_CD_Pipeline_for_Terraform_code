@@ -41,7 +41,7 @@ stages:
           -backend-config="storage_account_name=$(StorageAccName)" \
           -backend-config="container_name=$(ContainerName)" \
           -backend-config="key=$(BlobName)"
-        terraform plan -out='${{parameters.SourceDirectory}}/$(tf_planFile)' -lock=false -input=false
+        terraform plan -out='$(tf_planFile)' -lock=false -input=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
