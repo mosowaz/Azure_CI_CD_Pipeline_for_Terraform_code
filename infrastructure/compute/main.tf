@@ -21,7 +21,7 @@ resource "azurerm_network_interface" "spoke-nic" {
       location   = azurerm_resource_group.rg2.location
       rg_name    = azurerm_resource_group.rg2.name
       subnet_id  = data.azurerm_subnet.subnet2.subnet_id
-      private_ip = var.spokes-vm.spoke1.private_ip
+      private_ip = local.spokes-vm.spoke1.private_ip
       public_ip_address_id = data.azurerm_public_ip.spoke1_pub_ip.id
     }
     spoke2 = {
@@ -29,7 +29,7 @@ resource "azurerm_network_interface" "spoke-nic" {
       location   = azurerm_resource_group.rg1.location
       rg_name    = azurerm_resource_group.rg1.name
       subnet_id  = data.azurerm_subnet.subnet3.subnet_id
-      private_ip = var.spokes-vm.spoke2.private_ip
+      private_ip = local.spokes-vm.spoke2.private_ip
       public_ip_address_id = data.azurerm_public_ip.spoke2_pub_ip.id
     }
   })
@@ -77,7 +77,7 @@ resource "azurerm_network_interface" "hub-nic" {
     name                          = "internal"
     subnet_id                     = data.azurerm_subnet.subnet1.subnet_id
     private_ip_address_allocation = "Static"
-    private_ip_address            = var.hub-vm.private_ip
+    private_ip_address            = local.hub-vm.private_ip
     public_ip_address_id          = data.azurerm_public_ip.hub_pub_ip.id
   }
 }
