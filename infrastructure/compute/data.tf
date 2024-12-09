@@ -45,7 +45,7 @@ data "azurerm_public_ip" "spoke1_pub_ip" {
   resource_group_name = azurerm_public_ip.spoke1_pub_ip.resource_group_name
 }
 
-data "azurerm_public_ip" "spoke1_pub_ip" {
+data "azurerm_public_ip" "spoke2_pub_ip" {
   name                = azurerm_public_ip.spoke2_pub_ip.name
   resource_group_name = azurerm_public_ip.spoke2_pub_ip.resource_group_name
 }

@@ -83,7 +83,7 @@ resource "azurerm_network_interface" "hub-nic" {
 }
 
 resource "azurerm_linux_virtual_machine" "spokes-vm" {
-  for_each            = tomap({local.spokes-vm})
+  for_each            = tomap(local.spokes-vm)
   name                = each.value.name
   resource_group_name = each.value.rg_name
   location            = each.value.rg_location
