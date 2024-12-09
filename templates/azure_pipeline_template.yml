@@ -88,6 +88,7 @@ stages:
           - template: terraform_install.yml  
           
           - bash: |
+              chmod -R a+x .terraform/*
               terraform init -input=false \
                 -backend-config="resource_group_name=$(RG_Name)" \
                 -backend-config="storage_account_name=$(StorageAccName)" \
