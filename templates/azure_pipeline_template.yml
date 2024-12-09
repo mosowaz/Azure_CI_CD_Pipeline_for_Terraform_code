@@ -88,6 +88,8 @@ stages:
           - template: terraform_install.yml  
           
           - bash: |
+              rm -rf *.terraform .terraform.lock.hcl 2> /dev/null
+              rm -rf '$(Pipeline.Workspace)/*.terraform' '$(Pipeline.Workspace)/.terraform.lock.hcl' 2> /dev/null
               terraform init -input=false \
                 -backend-config="resource_group_name=$(RG_Name)" \
                 -backend-config="storage_account_name=$(StorageAccName)" \
