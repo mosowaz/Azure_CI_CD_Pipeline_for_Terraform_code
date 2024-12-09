@@ -41,7 +41,7 @@ stages:
           -backend-config="storage_account_name=$(StorageAccName)" \
           -backend-config="container_name=$(ContainerName)" \
           -backend-config="key=$(BlobName)"
-        terraform plan -out='$(Build.SourcesDirectory)/$(tf_planFile)' -lock=false -input=false
+        terraform plan -out='${{parameters.SourceDirectory}}/$(tf_planFile)' -lock=false -input=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -59,8 +59,7 @@ stages:
     
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Build.SourcesDirectory)' 
-        artifact: $(tf_planFile) # artifactName
+        targetPath: ${{parameters.SourceDirectory}}
         publishLocation: 'pipeline' # upload artifact to pipeline
       displayName: 'Publishing artifact'
     continueOnError: false  
@@ -88,8 +87,6 @@ stages:
           - template: terraform_install.yml  
           
           - bash: |
-              rm -rf *.terraform .terraform.lock.hcl 2> /dev/null
-              rm -rf '$(Pipeline.Workspace)/*.terraform' '$(Pipeline.Workspace)/.terraform.lock.hcl' 2> /dev/null
               terraform init -input=false \
                 -backend-config="resource_group_name=$(RG_Name)" \
                 -backend-config="storage_account_name=$(StorageAccName)" \
