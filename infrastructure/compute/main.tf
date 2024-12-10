@@ -97,7 +97,7 @@ resource "azurerm_linux_virtual_machine" "spokes-vm" {
 
   admin_ssh_key {
     username   = each.value.admin_username
-    public_key = file(each.value.public_key)
+    public_key = each.value.public_key
   }
   #admin_password = var.mypassword
   #disable_password_authentication = false
@@ -117,7 +117,7 @@ resource "azurerm_linux_virtual_machine" "spokes-vm" {
   connection {
     type        = "ssh"
     user        = self.admin_username
-    private_key = file(each.value.private_key)
+    private_key = each.value.private_key
     host        = self.public_ip_address
   }
 }
@@ -145,7 +145,7 @@ resource "azurerm_linux_virtual_machine" "hub-vm" {
 
   admin_ssh_key {
     username   = local.hub-vm.admin_username
-    public_key = file(local.hub-vm.public_key)
+    public_key = local.hub-vm.public_key
   }
 
   os_disk {
@@ -163,7 +163,7 @@ resource "azurerm_linux_virtual_machine" "hub-vm" {
   connection {
     type        = "ssh"
     user        = self.admin_username
-    private_key = file(local.hub-vm.private_key)
+    private_key = local.hub-vm.private_key
     host        = self.public_ip_address
   }
 }
