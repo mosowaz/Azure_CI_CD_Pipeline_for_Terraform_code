@@ -8,7 +8,6 @@ stages:
 
   jobs:
   - job: validate
-
     steps:
     - checkout: self
     - template: terraform_install.yml
@@ -37,8 +36,8 @@ stages:
     steps:
     - checkout: self
     - bash: |
-        terraform init -upgrade
-        terraform plan -destroy '-out=$(tf_destroyFile)' '-lock=false'
+        terraform init -input=false
+        terraform plan -destroy -out='${{parameters.tfplan}}' -lock=false -input=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -49,9 +48,10 @@ stages:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Pipeline.Workspace)' 
-        artifact: $(tf_destroyFile) # artifactName
+        targetPath: ${{parameters.SourceDirectory}} 
+        artifact: ${{parameters.tfplan}} # artifactName
         publishLocation: 'pipeline' # upload artifact to pipeline
+      displayName: 'Publish artifact'  
     continueOnError: false  
 
 - stage: Apply-Destroy-${{parameters.infrastructure}}
@@ -66,15 +66,25 @@ stages:
       runOnce:
         deploy:
           steps:
-          - download: current
-            artifact: $(tf_destroyFile)
+          - download: none
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: '${{parameters.tfplan}}'
+              targetPath: '$(Build.SourcesDirectory)'
             displayName: 'Downloading artifact'
 
           - template: terraform_install.yml  
           
           - bash: |
-              terraform apply $(tf_destroyFile) -auto-approve -lock=true
-            workingDirectory: '$(Pipeline.Workspace)'
+              chmod -R a+x .terraform/*
+              terraform init -input=false \
+                -backend-config="resource_group_name=$(RG_Name)" \
+                -backend-config="storage_account_name=$(StorageAccName)" \
+                -backend-config="container_name=$(ContainerName)" \
+                -backend-config="key=$(BlobName)"
+              terraform apply -auto-approve -input=false '${{parameters.tfplan}}' 
+            workingDirectory: '$(Build.SourcesDirectory)'
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)
               ARM_TENANT_ID: $(SPN2-tenant-id)

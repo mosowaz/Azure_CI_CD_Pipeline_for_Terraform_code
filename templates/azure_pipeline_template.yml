@@ -60,7 +60,7 @@ stages:
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: ${{parameters.SourceDirectory}}
-        artifact: '${{parameters.tfplan}}'
+        artifact: '${{parameters.tfplan}}' #artifactName
         publishLocation: 'pipeline' # upload artifact to pipeline
       displayName: 'Publishing artifact'
     continueOnError: false  
