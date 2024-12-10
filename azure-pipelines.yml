@@ -29,8 +29,6 @@ variables:
   value: "hub-spoke-peering"         # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
 - name: ADO-Environment
   value: "PROD"
-- name: tf_planFile
-  value: "main.tfplan"  
   
   # Reusing pipeline in multiple directories
 stages:
@@ -38,14 +36,17 @@ stages:
   parameters:
     SourceDirectory: 'infrastructure/network'   # change directory to network
     infrastructure: 'Network'
+    tfplan: 'network.tflan'
 
 - template: templates/azure_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastructure/compute'   # change directory to compute
     infrastructure: 'Compute'
+    tfplan: 'compute.tflan'
 
 - template: templates/azure_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastructure/routes'    # change directory to routes 
     infrastructure: 'Routes'
+    tfplan: 'routes.tflan'
  

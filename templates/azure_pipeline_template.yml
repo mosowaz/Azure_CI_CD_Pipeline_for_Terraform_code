@@ -41,7 +41,7 @@ stages:
           -backend-config="storage_account_name=$(StorageAccName)" \
           -backend-config="container_name=$(ContainerName)" \
           -backend-config="key=$(BlobName)"
-        terraform plan -out='$(tf_planFile)' -lock=false -input=false
+        terraform plan -out='${{parameters.tfplan}}' -lock=false -input=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -60,7 +60,7 @@ stages:
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: ${{parameters.SourceDirectory}}
-        artifact: '$(tf_planFile)'
+        artifact: '${{parameters.tfplan}}'
         publishLocation: 'pipeline' # upload artifact to pipeline
       displayName: 'Publishing artifact'
     continueOnError: false  
@@ -81,7 +81,7 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               buildType: 'current'
-              artifactName: '$(tf_planFile)'
+              artifactName: '${{parameters.tfplan}}'
               targetPath: '$(Build.SourcesDirectory)'
             displayName: 'Downloading artifact'
 
@@ -94,7 +94,7 @@ stages:
                 -backend-config="storage_account_name=$(StorageAccName)" \
                 -backend-config="container_name=$(ContainerName)" \
                 -backend-config="key=$(BlobName)"
-              terraform apply -auto-approve -input=false '$(tf_planFile)' 
+              terraform apply -auto-approve -input=false '${{parameters.tfplan}}' 
             workingDirectory: '$(Build.SourcesDirectory)'
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)
