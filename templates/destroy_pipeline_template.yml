@@ -58,7 +58,7 @@ stages:
         artifact: ${{parameters.tfplan}} # artifactName
         publishLocation: 'pipeline' # upload artifact to pipeline
       displayName: 'Publish artifact'  
-    continueOnError: false  
+    #continueOnError: false  
 
 - stage: Apply-Destroy-${{parameters.infrastructure}}
   displayName: '${{parameters.SourceDirectory}} Apply Stage'
