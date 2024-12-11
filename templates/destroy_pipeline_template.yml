@@ -2,13 +2,13 @@
 
 stages:
 - stage: Plan-Destroy-${{parameters.infrastructure}}
-  continueOnError: true
   displayName: '${{parameters.SourceDirectory}} Plan Stage'
   pool:
     vmImage: ubuntu-latest
 
   jobs:
   - job: validate
+    continueOnError: true
     steps:
     - checkout: self
     - template: terraform_install.yml
@@ -32,12 +32,17 @@ stages:
       workingDirectory: ${{parameters.SourceDirectory}}
 
   - job: plan-destroy-publish
+    continueOnError: true
     dependsOn: validate
     condition: succeeded()
     steps:
     - checkout: self
     - bash: |
-        terraform init -input=false
+        terraform init -input=false \
+          -backend-config="resource_group_name=$(RG_Name)" \
+          -backend-config="storage_account_name=$(StorageAccName)" \
+          -backend-config="container_name=$(ContainerName)" \
+          -backend-config="key=$(BlobName)"
         terraform plan -destroy -out='${{parameters.tfplan}}' -lock=false -input=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
@@ -56,13 +61,13 @@ stages:
     continueOnError: false  
 
 - stage: Apply-Destroy-${{parameters.infrastructure}}
-  continueOnError: true
   displayName: '${{parameters.SourceDirectory}} Apply Stage'
   pool:
     vmImage: ubuntu-latest
 
   jobs:
   - deployment: apply-destroy
+    continueOnError: true
     environment: $(ADO-Environment)        
     strategy:
       runOnce:
