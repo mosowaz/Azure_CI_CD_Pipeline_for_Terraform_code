@@ -36,8 +36,9 @@ azurerm version = 4.0.1
 
 ### ./rt_table-nsg
 1. Create network security group, security rules, and rule associtaion
-   - "hub-inbound-public" to allow local machine to connect to public ip of "hub-vm"
-   - "hub-outbound-private" to allow access from "hub-vm" to "spoke1-vm" and "spoke2-vm"
+   - "inbound-public" to allow local machine to connect to public ip of hub and spoke VMs
+   - "outbound-private" to allow access from other subnets withing Azure
+
   
 2. Create route tables and associations
    - route table "spoke1-2", next hop is NVA, and destination is "vnet3-subnet".\
