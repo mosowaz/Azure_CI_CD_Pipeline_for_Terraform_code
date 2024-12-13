@@ -100,12 +100,12 @@ resource "azurerm_network_security_rule" "spoke2-rule" {
 
 resource "azurerm_subnet_network_security_group_association" "spoke1-rule-association" {
   subnet_id                 = data.azurerm_subnet.subnet2.id
-  network_security_group_id = data.azurerm_network_security_group.spokes-nsg.id
+  network_security_group_id = data.azurerm_network_security_group.spoke1-nsg.id
 }
 
 resource "azurerm_subnet_network_security_group_association" "spoke2-rule-association" {
   subnet_id                 = data.azurerm_subnet.subnet3.id
-  network_security_group_id = data.azurerm_network_security_group.spokes-nsg.id
+  network_security_group_id = data.azurerm_network_security_group.spoke2-nsg.id
 }
 
 resource "azurerm_route_table" "spoke1-2" {
