@@ -1,21 +1,3 @@
-data "azurerm_resource_group" "rg1" {
-  name = "rg-${var.location1}"
-}
-
-data "azurerm_resource_group" "rg2" {
-  name = "rg-${var.location2}"
-}
-
-import {
-  to = azurerm_resource_group.rg1
-  id = data.azurerm_resource_group.rg1.id
-}
-
-import {
-  to = azurerm_resource_group.rg2
-  id = data.azurerm_resource_group.rg2.id
-}
-
 resource "azurerm_resource_group" "rg1" {
   name     = "rg-${var.location1}"
   location = var.location1
