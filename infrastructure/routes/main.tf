@@ -57,13 +57,33 @@ resource "azurerm_subnet_network_security_group_association" "hub-rule-associati
   network_security_group_id = data.azurerm_network_security_group.hub-nsg.id
 }
 
-resource "azurerm_network_security_group" "spokes-nsg" {
-  name                = "spoke-inbound-ssh"
+resource "azurerm_network_security_group" "spoke1-nsg" {
+  name                = "spoke1-inbound-ssh"
+  location            = azurerm_resource_group.rg2.location
+  resource_group_name = azurerm_resource_group.rg2.name
+}
+
+resource "azurerm_network_security_group" "spoke2-nsg" {
+  name                = "spoke2-inbound-ssh"
   location            = azurerm_resource_group.rg1.location
   resource_group_name = azurerm_resource_group.rg1.name
 }
 
-resource "azurerm_network_security_rule" "spokes-rule" {
+resource "azurerm_network_security_rule" "spoke1-rule" {
+    name                       = "spoke-inbound-public"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = var.mypublic-ip
+    destination_address_prefix = "*" #Any IP in the subnet associated with NSG rule
+    resource_group_name         = azurerm_resource_group.rg2.name
+    network_security_group_name = azurerm_network_security_group.spoke1-nsg.name 
+}
+
+resource "azurerm_network_security_rule" "spoke2-rule" {
     name                       = "spoke-inbound-public"
     priority                   = 100
     direction                  = "Inbound"
@@ -74,8 +94,9 @@ resource "azurerm_network_security_rule" "spokes-rule" {
     source_address_prefix      = var.mypublic-ip
     destination_address_prefix = "*" #Any IP in the subnet associated with NSG rule
     resource_group_name         = azurerm_resource_group.rg1.name
-    network_security_group_name = azurerm_network_security_group.spokes-nsg.name 
+    network_security_group_name = azurerm_network_security_group.spoke2-nsg.name 
 }
+
 
 resource "azurerm_subnet_network_security_group_association" "spoke1-rule-association" {
   subnet_id                 = data.azurerm_subnet.subnet2.id

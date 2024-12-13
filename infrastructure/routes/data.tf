@@ -29,9 +29,14 @@ data "azurerm_network_security_group" "hub-nsg" {
   resource_group_name = azurerm_resource_group.rg1.name
 }
 
-data "azurerm_network_security_group" "spokes-nsg" {
+data "azurerm_network_security_group" "spoke1-nsg" {
   name                = azurerm_network_security_group.spokes-nsg.name
-  resource_group_name = azurerm_resource_group.rg1.name
+  resource_group_name = azurerm_resource_group.rg2.name
+}
+
+data "azurerm_network_security_group" "spoke2-nsg" {
+  name                = azurerm_network_security_group.spokes-nsg.name
+  resource_group_name = azurerm_resource_group.rg2.name
 }
 
 data "azurerm_route_table" "spoke1-2" {
