@@ -8,7 +8,6 @@ stages:
 
   jobs:
   - job: validate
-    continueOnError: true
     steps:
     - checkout: self
     - template: terraform_install.yml
@@ -39,7 +38,6 @@ stages:
       workingDirectory: ${{parameters.SourceDirectory}}
 
   - job: plan_destroy_publish
-    continueOnError: true
     dependsOn: validate
     condition: succeeded()
     steps:
@@ -65,7 +63,7 @@ stages:
         artifact: ${{parameters.tfplan}} # artifactName
         publishLocation: 'pipeline' # upload artifact to pipeline
       displayName: 'Publish artifact'  
-    #continueOnError: false  
+    continueOnError: false  
 
 - stage: Apply_Destroy_${{parameters.infrastructure}}
   displayName: '${{parameters.SourceDirectory}} Apply Stage'
@@ -74,7 +72,6 @@ stages:
 
   jobs:
   - deployment: apply_destroy
-    continueOnError: true
     environment: $(ADO-Environment)        
     strategy:
       runOnce:
