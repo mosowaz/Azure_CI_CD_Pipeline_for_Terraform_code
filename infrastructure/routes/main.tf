@@ -53,7 +53,7 @@ resource "azurerm_network_security_rule" "hub-rule2" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "hub-rule-association" {
-  subnet_id                 = data.azurerm_subnet.subnet1.subnet_id
+  subnet_id                 = data.azurerm_subnet.subnet1.id
   network_security_group_id = data.azurerm_network_security_group.hub-nsg.id
 }
 
@@ -78,12 +78,12 @@ resource "azurerm_network_security_rule" "spokes-rule" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "spoke1-rule-association" {
-  subnet_id                 = data.azurerm_subnet.subnet2.subnet_id
+  subnet_id                 = data.azurerm_subnet.subnet2.id
   network_security_group_id = data.azurerm_network_security_group.spokes-nsg.id
 }
 
 resource "azurerm_subnet_network_security_group_association" "spoke2-rule-association" {
-  subnet_id                 = data.azurerm_subnet.subnet3.subnet_id
+  subnet_id                 = data.azurerm_subnet.subnet3.id
   network_security_group_id = data.azurerm_network_security_group.spokes-nsg.id
 }
 
@@ -101,7 +101,7 @@ resource "azurerm_route_table" "spoke1-2" {
 }
 
 resource "azurerm_subnet_route_table_association" "spoke1-association" {
-  subnet_id      = data.azurerm_subnet.subnet2.subnet_id
+  subnet_id      = data.azurerm_subnet.subnet2.id
   route_table_id = data.azurerm_route_table.spoke1-2.id
 }
 
@@ -119,6 +119,6 @@ resource "azurerm_route_table" "spoke2-1" {
 }
 
 resource "azurerm_subnet_route_table_association" "spoke2-association" {
-  subnet_id      = data.azurerm_subnet.subnet3.subnet_id
+  subnet_id      = data.azurerm_subnet.subnet3.id
   route_table_id = data.azurerm_route_table.spoke2-1.id
 }

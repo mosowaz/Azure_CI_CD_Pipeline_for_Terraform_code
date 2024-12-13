@@ -4,4 +4,4 @@
 
 **/terraform.tfstate.backup
 
-.vscode
+.vscode/*
