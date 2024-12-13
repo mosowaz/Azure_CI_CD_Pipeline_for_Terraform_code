@@ -33,7 +33,7 @@ resource "azurerm_network_security_rule" "hub-rule1" {
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefix      = "*" #Any IP in the subnet associated with NSG rule
-    destination_address_prefixes = [ var.spoke1_address_prefix, var.spoke2_address_prefix] #spokes address prefix
+    destination_address_prefixes = [ var.spoke1_address_prefix, var.spoke2_address_prefix ] #spokes address prefix
     resource_group_name         = azurerm_resource_group.rg1.name
     network_security_group_name = azurerm_network_security_group.hub-nsg.name 
 }
