@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/MosesOwaseye/hub%20and%20spokes%20vnet%20peering/_apis/build/status%2Fhub%20and%20spokes%20vnet%20peering?branchName=main)](https://dev.azure.com/MosesOwaseye/hub%20and%20spokes%20vnet%20peering/_build/latest?definitionId=6&branchName=main)
+
 # Azure_CI_CD_Pipeline_for_Terraform_with_SPN
 Using Azure ci cd Pipeline for Terraform code to create, modify or destroy resources in Azure Portal
 ## Connect Hub and Spoke virtual networks with virtual network peering using Terraform code
