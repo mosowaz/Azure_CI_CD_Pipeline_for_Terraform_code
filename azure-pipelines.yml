@@ -1,17 +1,17 @@
 name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
 
-trigger: 
-  batch: true
-  branches:
-   include:
-   - main
+trigger: none 
+  # batch: true
+  # branches:
+  #  include:
+  #  - main
   
-  paths:
-    include:
-      - '*'
-    exclude:
-      - SPN-Terraform-Deployment
-      - tf-destroy-pipelines.yml
+  # paths:
+  #   include:
+  #     - '*'
+  #   exclude:
+  #     - SPN-Terraform-Deployment
+  #     - tf-destroy-pipelines.yml
       
 variables:
 - name: systm.debug
