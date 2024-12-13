@@ -1,7 +1,7 @@
 # Pipeline template to be used in the main pipeline for multiple stages
 
 stages:
-- stage: Plan-Destroy-${{parameters.infrastructure}}
+- stage: Plan_Destroy_${{parameters.infrastructure}}
   displayName: '${{parameters.SourceDirectory}} Plan Stage'
   pool:
     vmImage: ubuntu-latest
@@ -31,7 +31,7 @@ stages:
       displayName: 'terraform fmt and validate'
       workingDirectory: ${{parameters.SourceDirectory}}
 
-  - job: plan-destroy-publish
+  - job: plan_destroy_publish
     continueOnError: true
     dependsOn: validate
     condition: succeeded()
@@ -60,13 +60,13 @@ stages:
       displayName: 'Publish artifact'  
     #continueOnError: false  
 
-- stage: Apply-Destroy-${{parameters.infrastructure}}
+- stage: Apply_Destroy_${{parameters.infrastructure}}
   displayName: '${{parameters.SourceDirectory}} Apply Stage'
   pool:
     vmImage: ubuntu-latest
 
   jobs:
-  - deployment: apply-destroy
+  - deployment: apply_destroy
     continueOnError: true
     environment: $(ADO-Environment)        
     strategy:
