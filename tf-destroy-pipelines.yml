@@ -15,8 +15,10 @@ trigger:
 
 variables:
 - name: systm.debug
-  value: 'true'
+  value: 'true'  
 - group: 'service-connection'
+- group: 'ssh-keys'
+- group: 'mypublic-ip'
 - name: RG_Name
   value: "rg-ADO-2"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
 - name: StorageAccName
