@@ -1,4 +1,4 @@
-[![Build Status](https://dev.azure.com/MosesOwaseye/hub%20and%20spokes%20vnet%20peering/_apis/build/status%2Fhub%20and%20spokes%20vnet%20peering?branchName=main)](https://dev.azure.com/MosesOwaseye/hub%20and%20spokes%20vnet%20peering/_build/latest?definitionId=6&branchName=main)
+[![Board Status](https://dev.azure.com/MosesOwaseye/706f21ad-ce53-4b98-8081-05541db4d040/71ddef0d-20e4-44c4-b11b-751f3e545a20/_apis/work/boardbadge/776ba128-e767-454a-8a2a-15ede3d389a2?columnOptions=1)](https://dev.azure.com/MosesOwaseye/706f21ad-ce53-4b98-8081-05541db4d040/_boards/board/t/71ddef0d-20e4-44c4-b11b-751f3e545a20/Stories/)
 
 # Azure_CI_CD_Pipeline_for_Terraform_with_SPN
 Using Azure ci cd Pipeline for Terraform code to create, modify or destroy resources in Azure Portal
