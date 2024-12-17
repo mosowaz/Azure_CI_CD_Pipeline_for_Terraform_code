@@ -1,73 +1,37 @@
 # Pipeline template to be used for cleanup 
+jobs:
+- job: 
+  displayName: 'Destroy ${{parameters.infrastructure}}'
+  pool: 
+    vmImage: ubuntu-latest
 
-pool:
-  vmImage: ubuntu-latest
+  steps:
+  - template: terraform_install.yml 
 
-steps:
-- task: DownloadPipelineArtifact@2
-  inputs:
-    buildType: 'specific'
-    project: '{project id}'
-    definition: '{pipeline id}'
-    buildVersionToDownload: 'latest'
-    artifactName: '${{parameters.tfplan}}'
-    targetPath: '$(Pipeline.Workspace)'
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      buildType: 'specific'
+      project: '$(projectName)'
+      definition: '$(definitionID)'
+      pipelineId: '$(buildID)'
+      buildVersionToDownload: 'latest'
+      artifactName: '${{parameters.tfplan}}'
+      targetPath: '$(Pipeline.Workspace)'
     displayName: "Download '${{parameters.tfplan}}' pipeline artifact"
 
+  - bash: |
+      chmod -R a+x .terraform/*
+      terraform init -input=false \
+        -backend-config="resource_group_name=$(RG_Name)" \
+        -backend-config="storage_account_name=$(StorageAccName)" \
+        -backend-config="container_name=$(ContainerName)" \
+        -backend-config="key=$(BlobName)"
+      terraform destroy -auto-approve -input=false '${{parameters.tfplan}}' 
+    workingDirectory: '$(Pipeline.Workspace)'
+    env:
+      ARM_CLIENT_ID: $(SPN2-client-id)
+      ARM_TENANT_ID: $(SPN2-tenant-id)
+      ARM_CLIENT_SECRET: $(SPN2-client-secret)
+      ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
+    displayName: 'terraform destroy'
 
-- template: terraform_install.yml  
-
-- bash: |
-    chmod -R a+x .terraform/*
-    terraform init -input=false \
-      -backend-config="resource_group_name=$(RG_Name)" \
-      -backend-config="storage_account_name=$(StorageAccName)" \
-      -backend-config="container_name=$(ContainerName)" \
-      -backend-config="key=$(BlobName)"
-    terraform apply -auto-approve -input=false '${{parameters.tfplan}}' 
-  workingDirectory: '$(Build.SourcesDirectory)'
-  env:
-    ARM_CLIENT_ID: $(SPN2-client-id)
-    ARM_TENANT_ID: $(SPN2-tenant-id)
-    ARM_CLIENT_SECRET: $(SPN2-client-secret)
-    ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
-  displayName: 'terraform apply'
-
-
-- stage: Deploy_${{parameters.infrastructure}}
-displayName: '${{parameters.SourceDirectory}} Deploy Stage'
-pool:
-  vmImage: ubuntu-latest
-
-jobs:
-- deployment: apply
-  environment: $(ADO-Environment)        
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - download: none
-- task: DownloadPipelineArtifact@2
-  inputs:
-    buildType: 'current'
-    artifactName: '${{parameters.tfplan}}'
-    targetPath: '$(Build.SourcesDirectory)'
-  displayName: 'Downloading artifact'
-
-- template: terraform_install.yml  
-
-- bash: |
-    chmod -R a+x .terraform/*
-    terraform init -input=false \
-      -backend-config="resource_group_name=$(RG_Name)" \
-      -backend-config="storage_account_name=$(StorageAccName)" \
-      -backend-config="container_name=$(ContainerName)" \
-      -backend-config="key=$(BlobName)"
-    terraform apply -auto-approve -input=false '${{parameters.tfplan}}' 
-  workingDirectory: '$(Build.SourcesDirectory)'
-  env:
-    ARM_CLIENT_ID: $(SPN2-client-id)
-    ARM_TENANT_ID: $(SPN2-tenant-id)
-    ARM_CLIENT_SECRET: $(SPN2-client-secret)
-    ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
-  displayName: 'terraform apply'

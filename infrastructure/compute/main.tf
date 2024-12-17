@@ -150,6 +150,7 @@ resource "azurerm_linux_virtual_machine" "hub-vm" {
               echo -e \\n"10.0.1.11 hub-vm"\\n >> /etc/hosts
               echo -e "172.16.1.12 spoke1-vm"\\n >> /etc/hosts
               echo -e "192.168.1.13 spoke2-vm"\\n >> /etc/hosts
+              shutdown -r +5
               EOF
   )
 

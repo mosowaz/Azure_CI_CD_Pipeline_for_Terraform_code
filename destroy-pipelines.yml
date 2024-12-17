@@ -1,23 +1,11 @@
 name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
 
-trigger: 
-  batch: true
-  branches:
-   include:
-   - main
+trigger: none
   
-  paths:
-    include:
-      - '*'
-    exclude:
-      - SPN-Terraform-Deployment
-      
 variables:
 - name: systm.debug
   value: 'true'
 - group: 'service-connection'
-- group: 'ssh-keys'
-- group: 'mypublic-ip'
 - name: RG_Name
   value: "rg-ADO-2"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
 - name: StorageAccName
@@ -28,24 +16,27 @@ variables:
   value: "hub-spoke-peering"         # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
 - name: ADO-Environment
   value: "PROD"
+- name: projectName
+  value: "hub and spokes vnet peering"
+- name: definitionID
+  value: "10"
+- name: buildID
+  value: "108"
   
   # Reusing pipeline in multiple directories
 stages:
-- template: templates/azure_pipeline_template.yml
+- template: templates/destroy_template.yml
   parameters:
-    SourceDirectory: 'infrastructure/network'   # change directory to network
     infrastructure: 'Network'
     tfplan: 'network.tflan'
 
-- template: templates/azure_pipeline_template.yml
+- template: templates/destroy_template.yml
   parameters:
-    SourceDirectory: 'infrastructure/compute'   # change directory to compute
     infrastructure: 'Compute'
     tfplan: 'compute.tflan'
 
-- template: templates/azure_pipeline_template.yml
+- template: templates/destroy_template.yml
   parameters:
-    SourceDirectory: 'infrastructure/routes'    # change directory to routes 
     infrastructure: 'Routes'
     tfplan: 'routes.tflan'
  
