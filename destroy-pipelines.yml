@@ -24,7 +24,7 @@ variables:
   value: "108"
   
   # Reusing pipeline in multiple directories
-stages:
+jobs:
 - template: templates/destroy_template.yml
   parameters:
     infrastructure: 'Network'
