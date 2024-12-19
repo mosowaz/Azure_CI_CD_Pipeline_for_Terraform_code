@@ -7,7 +7,7 @@ variables:
   value: 'true'
 - group: 'service-connection'
 - name: TF_VAR_backend-RGName
-  value: "rg-ADO-1"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
+  value: "rg-ADO-2"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
 - name: TF_VAR_backend-StorageAccName
   value: "mystorageacct16425"  # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
 - name: TF_VAR_backend-ContainerName
