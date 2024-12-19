@@ -19,13 +19,13 @@ variables:
 - group: 'service-connection'
 - group: 'ssh-keys'
 - group: 'mypublic-ip'
-- name: RG_Name
-  value: "rg-ADO-2"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
-- name: StorageAccName
+- name: TF_VAR_backend-RGName
+  value: "rg-ADO-1"            # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
+- name: TF_VAR_backend-StorageAccName
   value: "mystorageacct16425"  # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
-- name: ContainerName
+- name: TF_VAR_backend-ContainerName
   value: "storage-container"         # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
-- name: BlobName
+- name: TF_VAR_backend-BlobName
   value: "hub-spoke-peering"         # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
 - name: ADO-Environment
   value: "PROD"

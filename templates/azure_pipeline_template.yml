@@ -17,10 +17,10 @@ stages:
 
     - bash: |
         terraform init -input=false \
-          -backend-config="resource_group_name=$(RG_Name)" \
-          -backend-config="storage_account_name=$(StorageAccName)" \
-          -backend-config="container_name=$(ContainerName)" \
-          -backend-config="key=$(BlobName)"
+          -backend-config="resource_group_name=$(TF_VAR_backend-RGName)" \
+          -backend-config="storage_account_name=$(TF_VAR_backend-StorageAccName)" \
+          -backend-config="container_name=$(TF_VAR_backend-ContainerName)" \
+          -backend-config="key=$(TF_VAR_backend-BlobName)"
         terraform fmt && terraform validate
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
@@ -37,10 +37,10 @@ stages:
     - checkout: self
     - bash: | 
         terraform init -input=false \
-          -backend-config="resource_group_name=$(RG_Name)" \
-          -backend-config="storage_account_name=$(StorageAccName)" \
-          -backend-config="container_name=$(ContainerName)" \
-          -backend-config="key=$(BlobName)"
+          -backend-config="resource_group_name=$(TF_VAR_backend-RGName)" \
+          -backend-config="storage_account_name=$(TF_VAR_backend-StorageAccName)" \
+          -backend-config="container_name=$(TF_VAR_backend-ContainerName)" \
+          -backend-config="key=$(TF_VAR_backend-BlobName)"
         terraform plan -out='${{parameters.tfplan}}' -lock=false -input=false
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
@@ -90,10 +90,10 @@ stages:
           - bash: |
               chmod -R a+x .terraform/*
               terraform init -input=false \
-                -backend-config="resource_group_name=$(RG_Name)" \
-                -backend-config="storage_account_name=$(StorageAccName)" \
-                -backend-config="container_name=$(ContainerName)" \
-                -backend-config="key=$(BlobName)"
+                -backend-config="resource_group_name=$(TF_VAR_backend-RGName)" \
+                -backend-config="storage_account_name=$(TF_VAR_backend-StorageAccName)" \
+                -backend-config="container_name=$(TF_VAR_backend-ContainerName)" \
+                -backend-config="key=$(TF_VAR_backend-BlobName)"
               terraform apply -auto-approve -input=false '${{parameters.tfplan}}' 
             workingDirectory: '$(Build.SourcesDirectory)'
             env:
