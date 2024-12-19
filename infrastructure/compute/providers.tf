@@ -1,5 +1,10 @@
 terraform {
-  backend "azurerm" {}
+  backend "azurerm" {
+    resource_group_name = "$RG_NAME"
+    storage_account_name = "$STORAGEACCNAME"
+    container_name = "$CONTAINERNAME"
+    key = "$BLOBNAME"
+  }
   
   required_providers {
     azurerm = {
