@@ -1,4 +1,5 @@
 # Pipeline template to be used in the main pipeline for multiple stages
+
 stages:
 - stage: Build_${{parameters.infrastructure}}
   displayName: '${{parameters.SourceDirectory}} Build Stage'
@@ -96,7 +97,7 @@ stages:
                 -backend-config="container_name=$(ContainerName)" \
                 -backend-config="key=${{parameters.BlobName}}" \
                 -backend-config="use_azuread_auth=true"
-              terraform apply -auto-approve -input=false '${{parameters.tfplan}}' 
+              terraform apply -auto-approve -input=false '${{parameters.tfplan}}' -lock-timeout=2m
             workingDirectory: '$(Build.SourcesDirectory)'
             env:
               ARM_CLIENT_ID: $(SPN2-client-id)
