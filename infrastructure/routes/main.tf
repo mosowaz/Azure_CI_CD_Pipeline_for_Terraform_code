@@ -4,8 +4,8 @@ resource "azurerm_resource_group" "rg1" {
 }
 
 resource "azurerm_resource_group" "rg2" {
-  name     = "rg-${var.location1}-routes"
-  location = var.location1
+  name     = "rg-${var.location2}-routes"
+  location = var.location2
 }
 
 resource "azurerm_network_security_group" "hub-nsg" {
