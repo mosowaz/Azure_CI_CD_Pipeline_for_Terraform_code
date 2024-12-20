@@ -1,27 +1,27 @@
-data "azurerm_resource_group" "rg1" {
-  name = "rg-${var.location1}"
+data "azurerm_resource_group" "net_rg1" {
+  name = "rg-${var.location1}-network"
 }
 
-data "azurerm_resource_group" "rg2" {
-  name = "rg-${var.location2}"
+data "azurerm_resource_group" "net_rg2" {
+  name = "rg-${var.location2}-network"
 }
 
 data "azurerm_subnet" "subnet1" {
   name                 = "vnet-1-subnet"
   virtual_network_name = "vnet-1"
-  resource_group_name  = data.azurerm_resource_group.rg1.name
+  resource_group_name  = data.azurerm_resource_group.net_rg1.name
 }
 
 data "azurerm_subnet" "subnet2" {
   name                 = "vnet-2-subnet"
   virtual_network_name = "vnet-2"
-  resource_group_name  = data.azurerm_resource_group.rg2.name
+  resource_group_name  = data.azurerm_resource_group.net_rg2.name
 }
 
 data "azurerm_subnet" "subnet3" {
   name                 = "vnet-3-subnet"
   virtual_network_name = "vnet-3"
-  resource_group_name  = data.azurerm_resource_group.rg1.name
+  resource_group_name  = data.azurerm_resource_group.net_rg1.name
 }
 
 data "azurerm_network_security_group" "hub-nsg" {
