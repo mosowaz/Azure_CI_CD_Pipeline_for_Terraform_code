@@ -1,10 +1,10 @@
 resource "azurerm_resource_group" "rg1" {
-  name     = rg-${var.location1}-compute
+  name     = "rg-${var.location1}-compute"
   location = var.location1
 }
 
 resource "azurerm_resource_group" "rg2" {
-  name     = rg-${var.location2}-compute
+  name     = "rg-${var.location2}-compute"
   location = var.location2
 }
 
