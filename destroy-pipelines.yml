@@ -19,21 +19,21 @@ variables:
 
 # Reusing template pipeline for multiple directories
 stages:
-- template: templates/destroy_pipeline_template.yml
+- template: templates/destroy-template.yml
   parameters:
     SourceDirectory: 'infrastructure/routes'   # change directory to network
     infrastructure: 'Routes'
     tfplan: 'routes.tflan'
     BlobName: 'routes.tfstate'
 
-- template: templates/destroy_pipeline_template.yml
+- template: templates/destroy-template.yml
   parameters:
     SourceDirectory: 'infrastructure/compute'   # change directory to compute
     infrastructure: 'Compute'
     tfplan: 'compute.tflan'
     BlobName: 'compute.tfstate'
 
-- template: templates/destroy_pipeline_template.yml
+- template: templates/destroy-template.yml
   parameters:
     SourceDirectory: 'infrastructure/network'    # change directory to routes 
     infrastructure: 'Network'
