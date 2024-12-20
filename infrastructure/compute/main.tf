@@ -1,11 +1,11 @@
 resource "azurerm_resource_group" "rg1" {
-  name     = data.azurerm_resource_group.rg1.name
-  location = data.azurerm_resource_group.rg1.location
+  name     = rg-${var.location1}-compute
+  location = var.location1
 }
 
 resource "azurerm_resource_group" "rg2" {
-  name     = data.azurerm_resource_group.rg2.name
-  location = data.azurerm_resource_group.rg2.location
+  name     = rg-${var.location2}-compute
+  location = var.location2
 }
 
 resource "azurerm_network_interface" "spoke-nic" {
