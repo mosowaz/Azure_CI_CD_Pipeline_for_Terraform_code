@@ -17,7 +17,7 @@ stages:
 
     - bash: |
         terraform init -input=false \
-          -backend-config="resource_group_name=$(RG_Name)" \
+          -backend-config="resource_group_name=$(RGName)" \
           -backend-config="storage_account_name=$(StorageAccName)" \
           -backend-config="container_name=$(ContainerName)" \
           -backend-config="key=${{parameters.BlobName}}" \
@@ -38,7 +38,7 @@ stages:
     - checkout: self
     - bash: |
         terraform init -input=false \
-          -backend-config="resource_group_name=$(RG_Name)" \
+          -backend-config="resource_group_name=$(RGName)" \
           -backend-config="storage_account_name=$(StorageAccName)" \
           -backend-config="container_name=$(ContainerName)" \
           -backend-config="key=${{parameters.BlobName}}" \
@@ -85,7 +85,7 @@ stages:
           - bash: |
               chmod -R a+x .terraform/*
               terraform init -input=false \
-                -backend-config="resource_group_name=$(RG_Name)" \
+                -backend-config="resource_group_name=$(RGName)" \
                 -backend-config="storage_account_name=$(StorageAccName)" \
                 -backend-config="container_name=$(ContainerName)" \
                 -backend-config="key=${{parameters.BlobName}}" \
