@@ -25,8 +25,6 @@ variables:
   value: "mystorageacct16425"  # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
 - name: ContainerName
   value: "storage-container"         # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
-- name: BlobName
-  value: "hub-spoke-peering"         # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
 - name: ADO-Environment
   value: "PROD"
   
@@ -37,16 +35,19 @@ stages:
     SourceDirectory: 'infrastructure/network'   # change directory to network
     infrastructure: 'Network'
     tfplan: 'network.tflan'
+    BlobName: 'network.tfstate'
 
 - template: templates/azure_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastructure/compute'   # change directory to compute
     infrastructure: 'Compute'
     tfplan: 'compute.tflan'
+    BlobName: 'compute.tfstate'
 
 - template: templates/azure_pipeline_template.yml
   parameters:
     SourceDirectory: 'infrastructure/routes'    # change directory to routes 
     infrastructure: 'Routes'
     tfplan: 'routes.tflan'
+    BlobName: 'routes.tfstate'
  

@@ -20,7 +20,7 @@ stages:
           -backend-config="resource_group_name=$(RGName)" \
           -backend-config="storage_account_name=$(StorageAccName)" \
           -backend-config="container_name=$(ContainerName)" \
-          -backend-config="key=$(BlobName)" \
+          -backend-config="key=${{parameters.BlobName}}" \
           -backend-config="use_azuread_auth=true"
         terraform fmt && terraform validate
       env:
@@ -41,7 +41,7 @@ stages:
           -backend-config="resource_group_name=$(RGName)" \
           -backend-config="storage_account_name=$(StorageAccName)" \
           -backend-config="container_name=$(ContainerName)" \
-          -backend-config="key=$(BlobName)" \
+          -backend-config="key=${{parameters.BlobName}}" \
           -backend-config="use_azuread_auth=true"
         terraform plan -out='${{parameters.tfplan}}' -lock=false -input=false
       env:
@@ -62,7 +62,7 @@ stages:
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: ${{parameters.SourceDirectory}}
-        artifact: '${{parameters.tfplan}}' #artifactName
+        artifact: '${{parameters.tfplan}}' # artifactName
         publishLocation: 'pipeline' # upload artifact to pipeline
       displayName: 'Publishing artifact'
     continueOnError: false  
@@ -95,7 +95,7 @@ stages:
                 -backend-config="resource_group_name=$(RGName)" \
                 -backend-config="storage_account_name=$(StorageAccName)" \
                 -backend-config="container_name=$(ContainerName)" \
-                -backend-config="key=$(BlobName)" \
+                -backend-config="key=${{parameters.BlobName}}" \
                 -backend-config="use_azuread_auth=true"
               terraform apply -auto-approve -input=false '${{parameters.tfplan}}' 
             workingDirectory: '$(Build.SourcesDirectory)'
