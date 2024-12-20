@@ -49,6 +49,13 @@ stages:
         ARM_TENANT_ID: $(SPN2-tenant-id)
         ARM_CLIENT_SECRET: $(SPN2-client-secret)
         ARM_SUBSCRIPTION_ID: $(SPN2-subscription-id)
+        TF_VAR_hub-sshkey: $(hub-sshkey)
+        TF_VAR_hub-sshkey-pub: $(hub-sshkey-pub)
+        TF_VAR_sp1-sshkey: $(sp1-sshkey)
+        TF_VAR_sp1-sshkey-pub: $(sp1-sshkey-pub)
+        TF_VAR_sp2-sshkey: $(sp2-sshkey)
+        TF_VAR_sp2-sshkey-pub: $(sp2-sshkey-pub)
+        TF_VAR_mypublic-ip: $(mypublic-ip)
       workingDirectory: ${{parameters.SourceDirectory}}
       displayName: 'terraform plan -destroy'
 
