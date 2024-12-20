@@ -1,13 +1,3 @@
-import {
-  to = azurerm_resource_group.rg1
-  id = data.azurerm_resource_group.rg1.id
-}
-
-import {
-  to = azurerm_resource_group.rg2
-  id = data.azurerm_resource_group.rg2.id
-}
-
 resource "azurerm_resource_group" "rg1" {
   name     = data.azurerm_resource_group.rg1.name
   location = data.azurerm_resource_group.rg1.location
