@@ -7,6 +7,8 @@ steps:
     pipx ensurepath             # add installed packages into "$PATH"
     source ~/.bashrc
 
+    sudo apt install jq
+
     ######## Terraform installation ########
 
     sudo apt-get update && sudo apt-get install -y gnupg wget curl software-properties-common
