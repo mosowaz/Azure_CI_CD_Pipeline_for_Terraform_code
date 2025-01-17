@@ -21,7 +21,8 @@ stages:
           --enable-secret-scan-all-files \
           --skip-path SPN-Terraform-Deployment/ 
       continueOnError: false
-      condition: and(succeeded('tf_checkov_version_check'), ne(variables['Build.SourceBranchName']), main)
+      dependsOn: tf_checkov_version_check
+      condition: and(succeeded(), ne(variables['Build.SourceBranchName']), 'main')
       displayName: 'Scan terraform and pipeline files with checkov'
 
     - bash: |
@@ -83,6 +84,7 @@ stages:
     continueOnError: false  
    
 - stage: Deploy_${{parameters.infrastructure}}
+  condition: eq(variables['Build.SourceBranchName'], 'main')
   displayName: '${{parameters.SourceDirectory}} Deploy Stage'
   pool:
     vmImage: ubuntu-latest
@@ -102,7 +104,7 @@ stages:
               targetPath: '$(Build.SourcesDirectory)'
             displayName: 'Downloading artifact'
 
-          - template: terraform_install.yml  
+          - template: checkov-terraform_install.yml
           
           - bash: |
               chmod -R a+x .terraform/*
