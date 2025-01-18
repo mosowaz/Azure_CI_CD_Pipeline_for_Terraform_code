@@ -21,7 +21,6 @@ stages:
           --enable-secret-scan-all-files \
           --skip-path SPN-Terraform-Deployment/ 
       continueOnError: false
-      dependsOn: tf_checkov_version_check
       condition: and(succeeded(), ne(variables['Build.SourceBranchName']), 'main')
       displayName: 'Scan terraform and pipeline files with checkov'
 
