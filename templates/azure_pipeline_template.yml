@@ -54,8 +54,9 @@ stages:
           -backend-config="key=${{parameters.BlobName}}" \
           -backend-config="use_azuread_auth=true"
         terraform plan -out='${{parameters.tfplan}}' -lock=false -input=false 
-        terraform show -json '${{parameters.tfplan}}' | jq > '${{parameters.infrastructure}}.json'
-
+        
+        terraform show -json '${{parameters.tfplan}}' > '${{parameters.infrastructure}}.json'
+        pipx ensurepath && source ~/.bashrc
         checkov -f '${{parameters.infrastructure}}.json' --quiet \
           --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 
           --enable-secret-scan-all-files
