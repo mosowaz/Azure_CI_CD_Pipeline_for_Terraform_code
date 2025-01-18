@@ -54,12 +54,13 @@ stages:
           -backend-config="key=${{parameters.BlobName}}" \
           -backend-config="use_azuread_auth=true"
         terraform plan -out='${{parameters.tfplan}}' -lock=false -input=false 
-        
+
         terraform show -json '${{parameters.tfplan}}' > '${{parameters.infrastructure}}.json'
+        pipx install checkov
         pipx ensurepath && source ~/.bashrc
         checkov -f '${{parameters.infrastructure}}.json' --quiet \
-          --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 
-          --enable-secret-scan-all-files
+          --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 \
+          --enable-secret-scan-all-files --deep-analysis 
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
