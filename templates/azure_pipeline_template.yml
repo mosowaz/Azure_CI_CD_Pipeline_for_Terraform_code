@@ -18,7 +18,7 @@ stages:
 
     - bash: |
         checkov -d . --quiet --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 \
-          --enable-secret-scan-all-files \
+          --enable-secret-scan-all-files --deep-analysis \
           --skip-path SPN-Terraform-Deployment/ 
       continueOnError: false
       condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'main'))
