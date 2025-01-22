@@ -8,6 +8,7 @@ stages:
 
   jobs:
   - job: tfvalidate_checkov
+    condition: ne(variables['Build.SourceBranchName'], 'main')
     steps:
     - checkout: self
     - template: checkov-terraform_install.yml
@@ -21,7 +22,6 @@ stages:
           --enable-secret-scan-all-files --deep-analysis \
           --skip-path SPN-Terraform-Deployment/ 
       continueOnError: false
-      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'main'))
       displayName: 'Scan terraform and pipeline files with checkov'
 
     - bash: |
