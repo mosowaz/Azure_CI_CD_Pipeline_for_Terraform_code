@@ -10,7 +10,7 @@ stages:
   - job: validate
     steps:
     - checkout: self
-    - template: terraform_install.yml
+    - template: checkov-terraform_install.yml
 
     - script: terraform version
       displayName: 'terraform version'
@@ -87,7 +87,7 @@ stages:
               targetPath: '$(Build.SourcesDirectory)'
             displayName: 'Downloading artifact'
 
-          - template: terraform_install.yml  
+          - template: checkov-terraform_install.yml 
           
           - bash: |
               chmod -R a+x .terraform/*

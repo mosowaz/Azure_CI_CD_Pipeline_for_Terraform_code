@@ -7,13 +7,22 @@ stages:
     vmImage: ubuntu-latest
 
   jobs:
-  - job: validate
+  - job: tfvalidate_checkov
+    condition: ne(variables['Build.SourceBranchName'], 'main')
     steps:
     - checkout: self
-    - template: terraform_install.yml
+    - template: checkov-terraform_install.yml
+      
+    - bash: terraform version && checkov --version
+      name: tf_checkov_version_check
+      displayName: 'check terraform and checkov version'
 
-    - script: terraform version
-      displayName: 'terraform version'
+    - bash: |
+        checkov -d $(Pipeline.Workspace) --quiet --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 \
+          --enable-secret-scan-all-files --deep-analysis \
+          --skip-path SPN-Terraform-Deployment/ 
+      continueOnError: false
+      displayName: 'Scan terraform and pipeline files with checkov'
 
     - bash: |
         terraform init -input=false \
@@ -22,7 +31,7 @@ stages:
           -backend-config="container_name=$(ContainerName)" \
           -backend-config="key=${{parameters.BlobName}}" \
           -backend-config="use_azuread_auth=true"
-        terraform fmt && terraform validate
+        terraform fmt && terraform validate  
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -31,9 +40,10 @@ stages:
       displayName: 'terraform fmt and validate'
       workingDirectory: ${{parameters.SourceDirectory}}
 
-  - job: plan_and_publish
-    dependsOn: validate
-    condition: succeeded()
+
+  - job: plan_scan_publish
+    dependsOn: tfvalidate_checkov
+    condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main')) 
     steps:
     - checkout: self
     - bash: | 
@@ -43,7 +53,14 @@ stages:
           -backend-config="container_name=$(ContainerName)" \
           -backend-config="key=${{parameters.BlobName}}" \
           -backend-config="use_azuread_auth=true"
-        terraform plan -out='${{parameters.tfplan}}' -lock=false -input=false
+        terraform plan -out='${{parameters.tfplan}}' -lock=false -input=false 
+
+        pipx install checkov
+        pipx ensurepath && source ~/.bashrc
+        terraform show -json ${{parameters.tfplan}} | jq > {{parameters.tfplan}}.json
+        checkov -d $(Pipeline.Workspace) --quiet \
+          --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 \
+          --enable-secret-scan-all-files --deep-analysis 
       env:
         ARM_CLIENT_ID: $(SPN2-client-id)
         ARM_TENANT_ID: $(SPN2-tenant-id)
@@ -57,7 +74,7 @@ stages:
         TF_VAR_sp2-sshkey-pub: $(sp2-sshkey-pub)
         TF_VAR_mypublic-ip: $(mypublic-ip)
       workingDirectory: ${{parameters.SourceDirectory}}
-      displayName: 'terraform plan'
+      displayName: 'terraform plan and scan planFile'
     
     - task: PublishPipelineArtifact@1
       inputs:
@@ -68,6 +85,7 @@ stages:
     continueOnError: false  
    
 - stage: Deploy_${{parameters.infrastructure}}
+  condition: eq(variables['Build.SourceBranchName'], 'main')
   displayName: '${{parameters.SourceDirectory}} Deploy Stage'
   pool:
     vmImage: ubuntu-latest
@@ -87,7 +105,7 @@ stages:
               targetPath: '$(Build.SourcesDirectory)'
             displayName: 'Downloading artifact'
 
-          - template: terraform_install.yml  
+          - template: checkov-terraform_install.yml
           
           - bash: |
               chmod -R a+x .terraform/*
