@@ -43,7 +43,7 @@ stages:
 
   - job: plan_scan_publish
     dependsOn: tfvalidate_checkov
-    condition: succeeded()
+    condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main')) 
     steps:
     - checkout: self
     - bash: | 
