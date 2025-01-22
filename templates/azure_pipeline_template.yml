@@ -57,7 +57,8 @@ stages:
 
         pipx install checkov
         pipx ensurepath && source ~/.bashrc
-        checkov -d $(Build.SourcesDirectory) --quiet \
+        terraform show -json ${{parameters.tfplan}} | jq > {{parameters.tfplan}}.json
+        checkov -d $(Pipeline.Workspace) --quiet \
           --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 \
           --enable-secret-scan-all-files --deep-analysis 
       env:
