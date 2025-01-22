@@ -18,7 +18,7 @@ stages:
       displayName: 'check terraform and checkov version'
 
     - bash: |
-        checkov -d ${{Pipeline.Workspace}} --quiet --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 \
+        checkov -d ${{Build.SourcesDirectory}} --quiet --skip-check CKV2_AZURE_39,CKV2_AZURE_31,CKV_AZURE_50 \
           --enable-secret-scan-all-files --deep-analysis \
           --skip-path SPN-Terraform-Deployment/ 
       continueOnError: false
@@ -53,7 +53,7 @@ stages:
           -backend-config="container_name=$(ContainerName)" \
           -backend-config="key=${{parameters.BlobName}}" \
           -backend-config="use_azuread_auth=true"
-        terraform plan -out='${{parameters.tfplan}}' -lock=false -input=false 
+        terraform plan -out='${{Build.SourcesDirectory}}' -lock=false -input=false 
 
         pipx install checkov
         pipx ensurepath && source ~/.bashrc
