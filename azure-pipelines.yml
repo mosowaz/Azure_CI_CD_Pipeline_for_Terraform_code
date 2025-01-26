@@ -1,29 +1,29 @@
 name: $(Build.DefinitionName)_$(Date:yyyy-MM-dd)_v$(Rev:rr)
 
-trigger: 
-  batch: true
-  branches:
-    include:
-    - '*'
-    exclude: 
-    - main 
-  paths:
-    include:
-      - '*'
-    exclude:
-      - SPN-Terraform-Deployment
-      - destroy-pipelines.yml
+trigger: none
+ # batch: true
+ # branches:
+  #  include:
+   # - '*'
+   # exclude: 
+   # - main 
+ # paths:
+  #  include:
+   #   - '*'
+   # exclude:
+    #  - SPN-Terraform-Deployment
+     # - destroy-pipelines.yml
 
-pr:
-  branches:
-    include: 
-    - main
-  paths:
-    include:
-      - '*'
-    exclude:
-      - SPN-Terraform-Deployment
-      - destroy-pipelines.yml
+#pr:
+ # branches:
+  #  include: 
+   # - main
+ # paths:
+  #  include:
+   #   - '*'
+   # exclude:
+    #  - SPN-Terraform-Deployment
+     # - destroy-pipelines.yml
 
       
 variables:
